@@ -11,9 +11,10 @@ ekran_y = 10 # Ekranın boyundaki hücre sayısı
 WIDTH = hucre.width * ekran_g
 HEIGHT = hucre.height * ekran_y
 dusmanlar = []
+
 for i in range(5):
-    x = random.randint(2, 8) * 50
-    y = random.randint(2, 9) * 50
+    x = random.randint(2, 7) * 50
+    y = random.randint(2, 7) * 50
     dusman = Actor("düşman", topleft = (x, y))
     dusmanlar.append(dusman)
     dusman.saldiri = random.randint(5, 10)
@@ -40,6 +41,19 @@ karakter.attack = 5
 karakter.top = hucre.height
 karakter.left = hucre.width
 
+def carpismalar(eski_pos):
+    dusman_sira = karakter.collidelist(dusmanlar)
+    if dusman_sira != -1:
+        karakter.pos = eski_pos
+        dusman = dusmanlar[dusman_sira]
+        dusman.saglik -= karakter.attack
+        karakter.health -= dusman.saldiri
+        if (dusman.saglik <= 0):
+            dusmanlar.pop(dusman_sira)
+        if karakter.health <= 0:
+            exit()
+
+    
 def harita_cizim():
     for i in range(len(haritam)):
         for j in range(len(haritam[0])):
@@ -73,6 +87,7 @@ def draw():
     screen.draw.text(karakter.attack, center=(425, 475), color = 'white', fontsize = 20)
 
 def on_key_down(key):
+    eski_pos = karakter.pos
     if keyboard.right and karakter.x + hucre.width < WIDTH - hucre.width:
         karakter.x += hucre.width
         karakter.image = 'karakter'
@@ -83,3 +98,5 @@ def on_key_down(key):
         karakter.y += hucre.height
     elif keyboard.up and karakter.y - hucre.height > hucre.height:
         karakter.y -= hucre.height
+
+    carpismalar(eski_pos)
