@@ -20,6 +20,17 @@ for i in range(5):
     dusman.saldiri = random.randint(5, 10)
     dusman.saglik = random.randint(10, 20)
     dusman.bonus = random.randint(0, 2)
+
+def update(dt):
+    for i in range(len(kiliclar)):
+        if karakter.colliderect(kiliclar[i]):
+            karakter.attack += random.randint(4, 6)
+            kiliclar.pop(i)
+    for i in range(len(kalpler)):
+        if karakter.colliderect(kalpler[i]):
+            karakter.health += random.randint(4, 6)
+            kalpler.pop(i)
+            
     
 TITLE = "Zindanlar" # Oyunun Adı
 FPS = 30 # Saniyedeki Kare Sayısı
