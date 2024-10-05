@@ -10,7 +10,7 @@ ekran_g = 9 # Ekranın enindeki hücre sayısı
 ekran_y = 10 # Ekranın boyundaki hücre sayısı
 WIDTH = hucre.width * ekran_g
 HEIGHT = hucre.height * ekran_y
-dusmanlar = []
+dusmanlar, kalpler, kiliclar = [], [], []
 
 for i in range(5):
     x = random.randint(2, 7) * 50
@@ -19,7 +19,7 @@ for i in range(5):
     dusmanlar.append(dusman)
     dusman.saldiri = random.randint(5, 10)
     dusman.saglik = random.randint(10, 20)
-    
+    dusman.bonus = random.randint(0, 2)
     
 TITLE = "Zindanlar" # Oyunun Adı
 FPS = 30 # Saniyedeki Kare Sayısı
@@ -42,6 +42,7 @@ karakter.top = hucre.height
 karakter.left = hucre.width
 
 def carpismalar(eski_pos):
+
     dusman_sira = karakter.collidelist(dusmanlar)
     if dusman_sira != -1:
         karakter.pos = eski_pos
@@ -49,7 +50,15 @@ def carpismalar(eski_pos):
         dusman.saglik -= karakter.attack
         karakter.health -= dusman.saldiri
         if (dusman.saglik <= 0):
+            if dusman.bonus == 1:
+                kalp = Actor('kalp', (dusman.x, dusman.y))
+                kalpler.append(kalp)
+            elif dusman.bonus == 2:
+                kilic = Actor('kılıç', (dusman.x, dusman.y))
+                kiliclar.append(kilic)
+                
             dusmanlar.pop(dusman_sira)
+            
         if karakter.health <= 0:
             exit()
 
@@ -79,6 +88,12 @@ def draw():
     harita_cizim()
     for i in range(len(dusmanlar)):
         dusmanlar[i].draw()
+
+    for i in range(len(kalpler)):
+        kalpler[i].draw()
+
+    for i in range(len(kiliclar)):
+        kiliclar[i].draw()
         
     karakter.draw()
     screen.draw.text("Sağlık:", center=(35, 475), color = 'white', fontsize = 20)
